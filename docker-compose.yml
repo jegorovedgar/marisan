@@ -1,0 +1,31 @@
+version: '3.1'
+
+services:
+  wordpress:
+    image: wordpress
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: marisan
+      WORDPRESS_DB_PASSWORD: marisan_password
+      WORDPRESS_DB_NAME: marisan
+    volumes:
+      - ./html:/var/www/html
+      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+      - ./mail.ini:/usr/local/etc/php/conf.d/mail.ini
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: marisan
+      MYSQL_USER: marisan
+      MYSQL_PASSWORD: marisan_password
+      MYSQL_ROOT_PASSWORD: marisan_password
+    volumes:
+      - db:/var/lib/mysql
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+volumes:
+  wordpress:
+  db:
